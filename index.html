@@ -80,10 +80,11 @@ nav {
  width: 300px; max-width: 85vw;
  background: var(--warm-white);
  transform: translateX(-100%);
- transition: transform 0.38s cubic-bezier(0.4,0,0.2,1); display: flex; flex-direction: column;
+ visibility: hidden;
+ transition: transform 0.38s cubic-bezier(0.4,0,0.2,1), visibility 0s linear 0.38s; display: flex; flex-direction: column;
  box-shadow: 4px 0 40px rgba(42,31,20,0.15);
 }
-.drawer.open { transform: translateX(0); }
+.drawer.open { transform: translateX(0); visibility: visible; transition: transform 0.38s cubic-bezier(0.4,0,0.2,1), visibility 0s linear 0s; }
 .drawer-header {
  display: flex; align-items: center; justify-content: space-between;
  padding: 22px 28px;
@@ -128,11 +129,12 @@ nav {
  width: 380px; max-width: 100vw;
  background: var(--warm-white);
  transform: translateX(100%);
- transition: transform 0.38s cubic-bezier(0.4,0,0.2,1);
+ visibility: hidden;
+ transition: transform 0.38s cubic-bezier(0.4,0,0.2,1), visibility 0s linear 0.38s;
  display: flex; flex-direction: column;
  box-shadow: -4px 0 40px rgba(42,31,20,0.15);
 }
-.cart-panel.open { transform: translateX(0); }
+.cart-panel.open { transform: translateX(0); visibility: visible; transition: transform 0.38s cubic-bezier(0.4,0,0.2,1), visibility 0s linear 0s; }
 .cart-header {
  display: flex; align-items: center; justify-content: space-between;
  padding: 22px 24px; border-bottom: 1px solid rgba(196,151,90,0.15); flex-shrink: 0;
@@ -168,10 +170,11 @@ nav {
  position: fixed; inset: 0; z-index: 300;
  background: var(--warm-white);
  transform: translateY(100%);
- transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+ visibility: hidden;
+ transition: transform 0.4s cubic-bezier(0.4,0,0.2,1), visibility 0s linear 0.4s;
  overflow-y: auto; display: flex; flex-direction: column;
 }
-.checkout-overlay.open { transform: translateY(0); }
+.checkout-overlay.open { transform: translateY(0); visibility: visible; transition: transform 0.4s cubic-bezier(0.4,0,0.2,1), visibility 0s linear 0s; }
 .checkout-header {
  position: sticky; top: 0; z-index: 10;
  display: flex; align-items: center; justify-content: space-between;
@@ -370,6 +373,9 @@ footer { background: var(--brown); color: rgba(247,241,232,0.6); padding: 56px 4
 .footer-top { display: grid; grid-template-columns: 1fr; gap: 40px; margin-bottom: 48px; }
 .footer-brand .logo-text { font-family: 'Cormorant Garamond', serif; font-size: 26px; color: var(--cream); margin-bottom: 16px; display: block; font-weight: 300; }
 .footer-brand p { font-size: 14px; line-height: 1.7; max-width: 260px; }
+.social-links { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
+.social-icon { width: 38px; height: 38px; border-radius: 50%; background: rgba(247,241,232,0.08); border: 1px solid rgba(247,241,232,0.15); display: flex; align-items: center; justify-content: center; color: rgba(247,241,232,0.6); text-decoration: none; transition: background 0.2s, color 0.2s, transform 0.2s; cursor: pointer; }
+.social-icon:hover { background: var(--gold); color: white; border-color: var(--gold); transform: translateY(-2px); }
 .footer-col h5 { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--cream); margin-bottom: 20px; font-weight: 500; }
 .footer-col a { display: block; color: rgba(247,241,232,0.55); text-decoration: none; font-size: 14px; margin-bottom: 12px; transition: color 0.2s; cursor: pointer; }
 .footer-col a:hover { color: var(--gold); }
@@ -429,6 +435,7 @@ footer { background: var(--brown); color: rgba(247,241,232,0.6); padding: 56px 4
  <div class="drawer-body">
  <a class="drawer-link" onclick="closeDrawer(); document.getElementById('products').scrollIntoView({behavior:'smooth'});">Products</a>
  <a class="drawer-link" onclick="closeDrawer(); document.getElementById('how').scrollIntoView({behavior:'smooth'});">What's Inside</a>
+ <a class="drawer-link" onclick="closeDrawer(); window.location.href='our-story.html';">Our Story</a>
  </div>
  <div class="drawer-footer">
  <button class="drawer-shop-btn" onclick="closeDrawer(); document.getElementById('products').scrollIntoView({behavior:'smooth'});">Shop Now</button>
@@ -613,7 +620,7 @@ footer { background: var(--brown); color: rgba(247,241,232,0.6); padding: 56px 4
 <!-- WHAT'S INSIDE -->
 <section class="how" id="how">
  <div class="section-tag">What's Inside</div>
- <h2>Nine ingredients.<br><em>Nothing hidden.</em></h2>
+ <h2>Ten ingredients.<br><em>Nothing hidden.</em></h2>
  <div class="steps-carousel">
  <div class="steps">
  <div id="stepsTrack">
@@ -626,13 +633,14 @@ footer { background: var(--brown); color: rgba(247,241,232,0.6); padding: 56px 4
  <div class="step"><div class="step-num">07</div><span class="step-icon">🛡️</span><h4>Geogard 221</h4><p>A globally approved, biodegradable preservative system.</p></div>
  <div class="step"><div class="step-num">08</div><span class="step-icon">🥥</span><h4>Caprylyl/Capryl Glycoside</h4><p>A gentle, coconut-derived cleansing agent that helps the formula rinse clean without leaving residue behind.</p></div>
  <div class="step"><div class="step-num">09</div><span class="step-icon">🍊</span><h4>Sodium Citrate</h4><p>A natural mineral softener derived from citrus that keeps the formula's pH balanced and prevents hard-water buildup.</p></div>
+ <div class="step"><div class="step-num">10</div><span class="step-icon">🫧</span><h4>Lauramine Oxide</h4><p>A coconut-derived surfactant that boosts foam and helps the formula cling to surfaces for a deeper clean.</p></div>
  </div>
  </div>
  <button class="carousel-arrow" id="prevStep">&#8592;</button>
  <button class="carousel-arrow" id="nextStep">&#8594;</button>
  </div>
  <div class="carousel-dots" id="carouselDots">
- <button class="carousel-dot active"></button><button class="carousel-dot"></button><button class="carousel-dot"></button><button class="carousel-dot"></button><button class="carousel-dot"></button><button class="carousel-dot"></button><button class="carousel-dot"></button><button class="carousel-dot"></button><button class="carousel-dot"></button>
+ <button class="carousel-dot active"></button><button class="carousel-dot"></button><button class="carousel-dot"></button><button class="carousel-dot"></button><button class="carousel-dot"></button><button class="carousel-dot"></button><button class="carousel-dot"></button><button class="carousel-dot"></button><button class="carousel-dot"></button><button class="carousel-dot"></button>
  </div>
 </section>
 <!-- REVIEWS -->
@@ -665,6 +673,14 @@ footer { background: var(--brown); color: rgba(247,241,232,0.6); padding: 56px 4
  <div class="footer-brand">
  <span class="logo-text">BloomiEssence</span>
  <p>Plant-powered cleaning for the modern home. Beautiful formulas, zero compromise.</p>
+ <div class="social-links">
+ <a onclick="window.open('https://www.instagram.com/bloomiessencellc?igsh=MTNndnF0OWdmZ25xaQ==','_blank')" class="social-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor" stroke="none"/></svg></a>
+ <a onclick="window.open('https://www.tiktok.com/@bloomiessencellc?_r=1&_t=ZP-96aRqPy894Z','_blank')" class="social-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.95a8.16 8.16 0 004.77 1.52V7.02a4.85 4.85 0 01-1-.33z"/></svg></a>
+ <a onclick="window.open('https://www.facebook.com/share/17qRoGczdU/?mibextid=wwXIfr','_blank')" class="social-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
+ <a onclick="window.open('https://x.com/BloomiEssence','_blank')" class="social-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+ <a onclick="window.open('https://youtube.com/@bloomiessence?si=3PzYgKfyVH9YTwoh','_blank')" class="social-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58a2.78 2.78 0 001.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.96A29 29 0 0023 12a29 29 0 00-.46-5.58zM9.75 15.02V8.98L15.5 12l-5.75 3.02z"/></svg></a>
+ <a onclick="window.open('https://snapchat.com/t/LWRh0ifN','_blank')" class="social-icon"><svg width="20" height="20" viewBox="0 0 100 108" fill="currentColor"><path d="M 50 5 C 70 5,84 20,84 38 L 84 48 C 88 44,97 41,95 48 C 97 55,88 61,84 58 L 81 68 C 87 70,93 77,90 86 C 87 94,79 91,73 86 C 66 80,59 92,50 92 C 41 92,34 80,27 86 C 21 91,13 94,10 86 C 7 77,13 70,19 68 L 16 58 C 12 61,3 55,5 48 C 3 41,12 44,16 48 L 16 38 C 16 20,30 5,50 5 Z"/></svg></a>
+ </div>
  <div class="footer-contact">
  <p class="footer-contact-label">Contact Us</p>
  <a href="mailto:support.bloomiessence@gmail.com" class="footer-contact-email">support.bloomiessence@gmail.com</a>
@@ -677,6 +693,7 @@ footer { background: var(--brown); color: rgba(247,241,232,0.6); padding: 56px 4
  </div>
  <div class="footer-col">
  <h5>Company</h5>
+ <a onclick="window.location.href='our-story.html';">Our Story</a>
  <a onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'});">Ingredients</a>
  </div>
  <div class="footer-col">
