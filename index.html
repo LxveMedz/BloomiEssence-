@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -774,9 +775,11 @@ document.getElementById('checkoutSubmit').addEventListener('click', async () => 
  const name = document.getElementById('co-name').value.trim();
  const email = document.getElementById('co-email').value.trim();
  const addr1 = document.getElementById('co-addr1').value.trim();
+ const addr2 = document.getElementById('co-addr2').value.trim();
  const city = document.getElementById('co-city').value.trim();
  const state = document.getElementById('co-state').value.trim();
  const zip = document.getElementById('co-zip').value.trim();
+ const country = document.getElementById('co-country').value.trim();
  if (!name || !email || !addr1 || !city || !state || !zip) {
  alert('Please fill in all required fields.');
  return;
@@ -789,20 +792,48 @@ document.getElementById('checkoutSubmit').addEventListener('click', async () => 
  alert('Your cart is empty.');
  return;
  }
+
+ // Build the items list the backend expects: [{name, qty}]
+ const items = Object.values(cartItems).map(item => ({
+ name: item.name,
+ qty: item.qty,
+ }));
+
  const btn = document.getElementById('checkoutSubmit');
  const originalText = btn.innerHTML;
- btn.innerHTML = 'Processing...';
+ btn.innerHTML = 'Redirecting to payment…';
  btn.disabled = true;
- setTimeout(() => {
- alert('Thank you for your order! In a real app, this would redirect to Stripe. Your order summary:\n\n' + 
- Object.values(cartItems).map(i => `${i.name} × ${i.qty} = $${(i.price * i.qty).toFixed(2)}`).join('\n') +
- `\n\nTotal: $${Object.values(cartItems).reduce((s,i) => s + i.price * i.qty, 0).toFixed(2)}`);
+
+ try {
+ // TODO: replace with your actual Render backend URL (see backend/README.md)
+ const BACKEND_URL = 'https://bloomiessence.onrender.com';
+
+ const res = await fetch(`${BACKEND_URL}/api/create-checkout-session`, {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json' },
+ body: JSON.stringify({
+ items,
+ customer: {
+ name,
+ email,
+ address: { line1: addr1, line2: addr2, city, state, zip, country },
+ },
+ }),
+ });
+
+ const data = await res.json();
+ if (!res.ok || !data.url) {
+ throw new Error(data.error || 'Could not create checkout session.');
+ }
+
+ // Redirect to Stripe Checkout
+ window.location.href = data.url;
+ } catch (err) {
+ console.error('Checkout error:', err);
+ alert('Something went wrong. Please try again or contact support.bloomiessence@gmail.com.');
  btn.innerHTML = originalText;
  btn.disabled = false;
- cartItems = {};
- renderCart();
- closeCheckout();
- }, 800);
+ }
 });
 function renderCart() {
  const keys = Object.keys(cartItems);
