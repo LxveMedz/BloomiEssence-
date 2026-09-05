@@ -7,67 +7,67 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
-  body { font-family: 'DM Sans', sans-serif; background:#FDFAF5; color:#2A1F14; display:flex; align-items:center; justify-content:center; min-height:100vh; margin:0; text-align:center; padding:24px; }
-  .card { max-width:440px; }
-  h1 { font-family:'Cormorant Garamond', serif; font-weight:400; font-size:34px; margin-bottom:14px; }
-  p { color:#7A6A58; line-height:1.7; font-size:15px; }
-  a { color:#C4975A; text-decoration:none; border-bottom:1px solid #C4975A; }
+  body { font-family: 'DM Sans', sans-serif; background:#FDFAF5; color:#2A1F14; display:flex; align-items:center; justify-content:center; min-height:100vh; margin:0; text-align:center; padding:24px; }
+  .card { max-width:440px; }
+  h1 { font-family:'Cormorant Garamond', serif; font-weight:400; font-size:34px; margin-bottom:14px; }
+  p { color:#7A6A58; line-height:1.7; font-size:15px; }
+  a { color:#C4975A; text-decoration:none; border-bottom:1px solid #C4975A; }
 </style>
 </head>
 <body>
-  <div class="card">
-    <h1>Thank you for your order 🌿</h1>
-    <p id="status">Confirming your payment…</p>
-    <p><a href="/">Back to BloomiEssence</a></p>
-  </div>
+  <div class="card">
+    <h1>Thank you for your order 🌿</h1>
+    <p id="status">Confirming your payment…</p>
+    <p><a href="index.html">Back to BloomiEssence</a></p>
+  </div>
 
 <script>
-  // Fill these in from your EmailJS dashboard (emailjs.com)
-  const EMAILJS_PUBLIC_KEY = 'YOUR_EMAILJS_PUBLIC_KEY';
-  const EMAILJS_SERVICE_ID = 'YOUR_SERVICE_ID';
-  const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';
-  const BACKEND_URL = 'https://bloomiessence.onrender.com'; // same URL used in the main site's checkout script
+  // Fill these in from your EmailJS dashboard (emailjs.com)
+  const EMAILJS_PUBLIC_KEY = 'YOUR_EMAILJS_PUBLIC_KEY';
+  const EMAILJS_SERVICE_ID = 'YOUR_SERVICE_ID';
+  const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';
+  const BACKEND_URL = 'https://your-backend.onrender.com'; // same URL used in the main site's checkout script
 
-  emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+  emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
 
-  const statusEl = document.getElementById('status');
-  const sessionId = new URLSearchParams(window.location.search).get('session_id');
+  const statusEl = document.getElementById('status');
+  const sessionId = new URLSearchParams(window.location.search).get('session_id');
 
-  // The Stripe webhook writes the order to Supabase asynchronously, so it may
-  // not exist yet the instant this page loads. Poll briefly, then give up gracefully.
-  async function fetchOrderWithRetry(attempts = 6, delayMs = 1500) {
-    for (let i = 0; i < attempts; i++) {
-      const res = await fetch(`${BACKEND_URL}/api/order/${sessionId}`);
-      if (res.status === 200) return res.json();
-      await new Promise((r) => setTimeout(r, delayMs));
-    }
-    return null;
-  }
+  // The Stripe webhook writes the order to Supabase asynchronously, so it may
+  // not exist yet the instant this page loads. Poll briefly, then give up gracefully.
+  async function fetchOrderWithRetry(attempts = 6, delayMs = 1500) {
+    for (let i = 0; i < attempts; i++) {
+      const res = await fetch(`${BACKEND_URL}/api/order/${sessionId}`);
+      if (res.status === 200) return res.json();
+      await new Promise((r) => setTimeout(r, delayMs));
+    }
+    return null;
+  }
 
-  (async () => {
-    if (!sessionId) {
-      statusEl.textContent = 'Order confirmed!';
-      return;
-    }
-    try {
-      const order = await fetchOrderWithRetry();
-      if (!order) {
-        statusEl.textContent = 'Payment received — your receipt is on the way.';
-        return;
-      }
+  (async () => {
+    if (!sessionId) {
+      statusEl.textContent = 'Order confirmed!';
+      return;
+    }
+    try {
+      const order = await fetchOrderWithRetry();
+      if (!order) {
+        statusEl.textContent = 'Payment received — your receipt is on the way.';
+        return;
+      }
 
-      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-        to_email: order.customer_email,
-        to_name: order.customer_name,
-        order_total: (order.amount_total / 100).toFixed(2),
-      });
+      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+        to_email: order.customer_email,
+        to_name: order.customer_name,
+        order_total: (order.amount_total / 100).toFixed(2),
+      });
 
-      statusEl.textContent = 'Order confirmed — check your inbox for the receipt!';
-    } catch (err) {
-      console.error(err);
-      statusEl.textContent = 'Order confirmed! (confirmation email may be delayed)';
-    }
-  })();
+      statusEl.textContent = 'Order confirmed — check your inbox for the receipt!';
+    } catch (err) {
+      console.error(err);
+      statusEl.textContent = 'Order confirmed! (confirmation email may be delayed)';
+    }
+  })();
 </script>
 </body>
 </html>
